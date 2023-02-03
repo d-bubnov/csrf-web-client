@@ -15,7 +15,6 @@ export class AppComponent {
     
     fetch('http://127.0.0.1:8000/api/v1/get-csrf-token/', {
       method: 'GET',
-      credentials: 'include',
       cache: 'no-cache',
       mode: 'no-cors'
     })
@@ -31,7 +30,7 @@ export class AppComponent {
     })
     .then((response) => {
 
-      console.log('First result:',  response.json());
+      console.log('First result:',  response);
 
       const csrftoken = getCookie('csrftoken');
       console.log('csrftoken:', csrftoken);
@@ -48,7 +47,7 @@ export class AppComponent {
           }
         })
         .then((response) => {
-          console.log('Second result:', response.json());
+          console.log('Second result:', response);
         })
         .catch((error) => {
           console.log('Cannot execute POST method. Error:', error);
