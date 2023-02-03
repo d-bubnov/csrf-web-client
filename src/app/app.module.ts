@@ -11,7 +11,10 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    HttpClientXsrfModule
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'csrftoken',
+      headerName: 'X-CSRFTOKEN',
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
