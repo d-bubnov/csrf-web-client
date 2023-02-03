@@ -33,7 +33,7 @@ export class AppComponent {
       method: 'GET',
       credentials: 'include',
       cache: 'no-cache',
-      mode: 'cors'
+      mode: 'no-cors'
     })
     .then((response) => {
 
@@ -48,7 +48,7 @@ export class AppComponent {
           method: 'POST',
           credentials: 'include',
           cache: 'no-cache',
-          mode: 'cors',
+          mode: 'no-cors',
           headers: {
             'X-CSRFToken': csrftoken
           }
