@@ -13,6 +13,16 @@ export class AppComponent {
 
   onSave() {
     
+    fetch('http://127.0.0.1:8000/api/v1/get-csrf-token/', {
+      method: 'GET',
+      credentials: 'include',
+      cache: 'no-cache',
+      mode: 'no-cors'
+    })
+      .then(response => {
+        console.log(response);
+      });
+
     fetch('http://127.0.0.1:8000/api/v1', {
       method: 'GET',
       credentials: 'include',
