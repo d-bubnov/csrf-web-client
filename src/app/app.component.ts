@@ -10,7 +10,7 @@ export class AppComponent {
   
   title = 'csrf-web-client';
 
-  getCookie(name: string): string | null {
+  getCookie = (name: string): string | null => {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
@@ -29,7 +29,7 @@ export class AppComponent {
 
   onSave() {
     
-    fetch('http://127.0.0.1/api/v1', {
+    fetch('http://127.0.0.1:8000/api/v1', {
       method: 'GET',
       credentials: 'include',
       cache: 'no-cache',
@@ -37,18 +37,14 @@ export class AppComponent {
     })
     .then((response) => {
 
-      response
-        .json()
-        .then(res => {
-          console.log('First result:', res);
-        });
+      console.log('First result:',  response.json());
 
       const csrftoken = this.getCookie('csrftoken');
       console.log('csrftoken:', csrftoken);
 
-      if (csrftoken) {
+      if (csrftoken || true) {
 
-        fetch('http://127.0.0.1/api/v1/auth/login', {
+        fetch('http://127.0.0.1:8000/api/v1/auth/login', {
           method: 'POST',
           credentials: 'include',
           cache: 'no-cache',
@@ -58,11 +54,8 @@ export class AppComponent {
           }
         })
         .then((response) => {
-            response
-              .json()
-              .then(res => {
-                console.log('Second result:', res);
-              });
+
+          console.log('Second result:', response.json());
         })
         .catch((error) => {
           console.log('Cannot execute POST method. Error:', error);
