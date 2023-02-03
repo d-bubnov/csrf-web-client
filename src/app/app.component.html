@@ -7,9 +7,9 @@
   <button (click)="onSave()" title="А ты уверен?">Получить CSRF токен</button>
 
   <p>А тут кнопка в форме, прям как на stackoverflow!</p>
-  <form action="http://127.0.0.1:8000/api/v1" method="post">
+  <form action="http://127.0.0.1:8000/api/v1/" method="get">
     <app-csrftoken />
-    <button type="submit">Send!!!</button>
+    <button type="submit" (click)="onSubmit">Send!!!</button>
   </form>
 
 </div>
