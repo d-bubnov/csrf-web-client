@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { getCookie } from 'src/app/helpers/cookieHelper';
 
 @Component({
   selector: 'app-root',
@@ -9,23 +10,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
   
   title = 'csrf-web-client';
-
-  getCookie = (name: string): string | null => {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-
-    return cookieValue;
-  }
 
   onSave() {
     
@@ -39,7 +23,7 @@ export class AppComponent {
 
       console.log('First result:',  response.json());
 
-      const csrftoken = this.getCookie('csrftoken');
+      const csrftoken = getCookie('csrftoken');
       console.log('csrftoken:', csrftoken);
 
       if (csrftoken) {
@@ -54,7 +38,6 @@ export class AppComponent {
           }
         })
         .then((response) => {
-
           console.log('Second result:', response.json());
         })
         .catch((error) => {

@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+import { CSRFTokenComponent } from './csrftoken/csrftoken.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CSRFTokenComponent
   ],
   imports: [
     BrowserModule,

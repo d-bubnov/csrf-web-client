@@ -6,4 +6,9 @@
 
   <button (click)="onSave()" title="А ты уверен?">Получить CSRF токен</button>
 
+  <form action="http://127.0.0.1:8000/api/v1" method="post">
+    <app-csrftoken />
+    <button type="submit">Send!!!</button>
+  </form>
+
 </div>
