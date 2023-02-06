@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { getCookie } from 'src/app/helpers/cookieHelper';
 
 @Component({
@@ -8,52 +9,63 @@ import { getCookie } from 'src/app/helpers/cookieHelper';
 })
 
 export class AppComponent {
-  
-  title = 'csrf-web-client';
 
-  onSubmit(e: Event) {
-    e.preventDefault();
-  }
+  constructor(private cookieService: CookieService) {}
 
-  onSave() {
+  onCsrfTokenClick() {
     
     fetch('http://127.0.0.1:8000/api/v1/get-csrf-token/', {
       method: 'GET',
       cache: 'no-cache',
-      mode: 'no-cors'
+      credentials: 'same-origin',
+      mode: 'no-cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     })
-      .then(response => {
-        console.log(response);
+    .then((response) => {
         const csrftoken = getCookie('csrftoken');
-        console.log('csrftoken:', csrftoken);
-      });
+        console.log('Call `api/v1/get-csrf-token` API. Value of the csrftoken:', csrftoken);
 
-    fetch('http://127.0.0.1:8000/api/v1', {
+        const csrftokenApi = this.cookieService.get('csrftoken');
+        console.log('Call `api/v1/get-csrf-token` API. Value of the csrftoken (from service):', csrftokenApi);
+
+        this.fetchApi();
+    });
+  }
+
+  fetchApi(){
+
+    fetch('http://127.0.0.1:8000/api/v1/', {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'same-origin',
       cache: 'no-cache',
       mode: 'no-cors'
     })
     .then((response) => {
 
-      console.log('First result:',  response);
-
       const csrftoken = getCookie('csrftoken');
-      console.log('csrftoken:', csrftoken);
+      console.log('Call `api/v1/` API. Value of the csrftoken:', csrftoken);
 
       if (csrftoken) {
 
-        fetch('http://127.0.0.1:8000/api/v1/auth/login', {
+        fetch('http://127.0.0.1:8000/api/v1/api-auth/login/', {
           method: 'POST',
-          credentials: 'include',
+          credentials: 'same-origin',
           cache: 'no-cache',
           mode: 'no-cors',
           headers: {
             'X-CSRFToken': csrftoken
-          }
+          },
+          body: JSON.stringify({
+            username: 'admin',
+            password: 'admin',
+          }),
         })
         .then((response) => {
-          console.log('Second result:', response);
+          const csrftoken = getCookie('csrftoken');
+          console.log('Call `api/v1/api-auth/login` API. Value of the csrftoken:', csrftoken);
         })
         .catch((error) => {
           console.log('Cannot execute POST method. Error:', error);

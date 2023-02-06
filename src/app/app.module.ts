@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { CookieService } from  'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
 import { CSRFTokenComponent } from './csrftoken/csrftoken.component';
@@ -14,12 +15,12 @@ import { CSRFTokenComponent } from './csrftoken/csrftoken.component';
     BrowserModule,
     HttpClientModule,
     HttpClientXsrfModule
-    // .withOptions({
-    //   cookieName: 'csrftoken',
-    //   headerName: 'X-CSRFTOKEN',
-    // }),
+    .withOptions({
+      cookieName: 'csrftoken',
+      headerName: 'X-CSRFTOKEN',
+    }),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ CookieService ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

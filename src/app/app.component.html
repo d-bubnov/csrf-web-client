@@ -4,12 +4,6 @@
   <h2> Тестирование долбаного CSRF токена </h2>
   <p>Что нужно сделать? Нажать на кнопку!</p>
 
-  <button (click)="onSave()" title="А ты уверен?">Получить CSRF токен</button>
-
-  <p>А тут кнопка в форме, прям как на stackoverflow!</p>
-  <form action="http://127.0.0.1:8000/api/v1/" method="get">
-    <app-csrftoken />
-    <button type="submit" (click)="onSubmit">Send!!!</button>
-  </form>
+  <button (click)="onCsrfTokenClick()" title="А ты уверен?">Получить CSRF токен</button>
 
 </div>
