@@ -39,42 +39,44 @@ export class AppComponent {
 
     fetch('http://127.0.0.1:8000/api/v1/', {
       method: 'GET',
-      credentials: 'same-origin',
+      credentials: 'include',
       cache: 'no-cache',
-      mode: 'no-cors'
+      mode: 'no-cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     })
     .then((response) => {
-
-      const csrftoken = getCookie('csrftoken');
-      console.log('Call `api/v1/` API. Value of the csrftoken:', csrftoken);
-
-      if (csrftoken) {
-
-        fetch('http://127.0.0.1:8000/api/v1/api-auth/login/', {
-          method: 'POST',
-          credentials: 'same-origin',
-          cache: 'no-cache',
-          mode: 'no-cors',
-          headers: {
-            'X-CSRFToken': csrftoken
-          },
-          body: JSON.stringify({
-            username: 'admin',
-            password: 'admin',
-          }),
-        })
-        .then((response) => {
-          const csrftoken = getCookie('csrftoken');
-          console.log('Call `api/v1/api-auth/login` API. Value of the csrftoken:', csrftoken);
-        })
-        .catch((error) => {
-          console.log('Cannot execute POST method. Error:', error);
-        });
-
-      }  
     })
     .catch((error) => {
       console.log('Cannot execute GET method. Error:', error);
     });
+
+
+    const csrftoken = getCookie('csrftoken');
+
+    fetch('http://127.0.0.1:8000/api/v1/api-auth/login/', {
+      method: 'POST',
+      credentials: 'include',
+      cache: 'no-cache',
+      mode: 'no-cors',
+      headers: {
+        'HTTP_X_CSRFTOKEN': `${csrftoken}`
+      },
+      body: JSON.stringify({
+        username: 'admin',
+        password: 'admin',
+      }),
+    })
+    .then((response) => {
+      const csrftoken = getCookie('csrftoken');
+      console.log('Call `api/v1/api-auth/login` API. Value of the csrftoken:', csrftoken);
+    })
+    .catch((error) => {
+      console.log('Cannot execute POST method. Error:', error);
+    });
+
+
   }
 }

@@ -17,7 +17,7 @@ import { CSRFTokenComponent } from './csrftoken/csrftoken.component';
     HttpClientXsrfModule
     .withOptions({
       cookieName: 'csrftoken',
-      headerName: 'X-CSRFTOKEN',
+      headerName: 'HTTP_X_CSRFTOKEN',
     }),
   ],
   providers: [ CookieService ],
