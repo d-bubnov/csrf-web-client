@@ -63,7 +63,7 @@ export class AppComponent {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        // 'x-csrftoken': `${csrfToken}`
+        'x-csrftoken': `${csrfToken}`
       },
       body: JSON.stringify({
         username: 'admin',
