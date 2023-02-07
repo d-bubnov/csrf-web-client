@@ -2,10 +2,6 @@ import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { getCookie } from 'src/app/helpers/cookieHelper';
 
-interface TokenResponse {
-  csrf_token: string;
-};
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,22 +19,16 @@ export class AppComponent {
   getCsrfToken() {
     fetch('http://127.0.0.1:8000/api/v1/get-csrf-token/', {
       method: 'GET',
-      credentials: 'same-origin',
+      credentials: 'include',
       mode: 'cors'
     })
-    .then(response => {
-      return response.json();
-    })
-    .then((token: TokenResponse) => {
-      if (token && token.csrf_token) {
-        // Засетим токен в наши куки:
-        document.cookie = `csrftoken=${token.csrf_token}`;
+    .then(() => {
+      
+      const csrftoken = getCookie('csrftoken');
+      console.log('csrftoken: ', csrftoken);
 
-        console.log('csrftoken: ', token.csrf_token);
-
-        this.getEndpoints();
-        this.authLogin(token.csrf_token);
-      }
+      this.getEndpoints();
+      this.authLogin();
     })
     .catch((error) => {
       console.log('Cannot execute GET method. Error:', error);
@@ -63,15 +53,22 @@ export class AppComponent {
     });
   }
 
-  authLogin(csrfToken: string) {
+  authLogin() {
+
+    const csrfToken = getCookie('csrftoken');
 
     fetch('http://127.0.0.1:8000/api/v1/api-auth/login/', {
       method: 'POST',
       credentials: 'include',
       mode: 'cors',
       headers: {
-        'x-csrftoken': csrfToken
+        'Content-Type': 'application/json',
+        // 'x-csrftoken': `${csrfToken}`
       },
+      body: JSON.stringify({
+        username: 'admin',
+        password: 'admin',
+      }),
     })
     .then((response) => {
       // console.log('api/v1/api-auth/login', response);

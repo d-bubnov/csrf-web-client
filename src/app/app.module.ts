@@ -15,10 +15,10 @@ import { CSRFTokenComponent } from './csrftoken/csrftoken.component';
     BrowserModule,
     HttpClientModule,
     HttpClientXsrfModule
-    .withOptions({
-      cookieName: 'csrftoken',
-      headerName: 'HTTP_X_CSRFTOKEN',
-    }),
+      .withOptions({
+        cookieName: 'csrftoken',
+        headerName: 'X-CSRF-TOKEN',
+      }),
   ],
   providers: [ CookieService ],
   bootstrap: [ AppComponent ]
