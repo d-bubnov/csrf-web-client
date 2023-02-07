@@ -24,11 +24,7 @@ export class AppComponent {
     fetch('http://127.0.0.1:8000/api/v1/get-csrf-token/', {
       method: 'GET',
       credentials: 'same-origin',
-      mode: 'cors',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      mode: 'cors'
     })
     .then(response => {
       return response.json();
@@ -38,9 +34,9 @@ export class AppComponent {
         // Засетим токен в наши куки:
         document.cookie = `csrftoken=${token.csrf_token}`;
 
-        console.log('csrftoken', token.csrf_token);
+        console.log('csrftoken: ', token.csrf_token);
 
-        this.getEndpoints(token.csrf_token);
+        this.getEndpoints();
         this.authLogin(token.csrf_token);
       }
     })
@@ -49,23 +45,18 @@ export class AppComponent {
     });
   }
 
-  getEndpoints(csrfToken: string) {
+  getEndpoints() {
     // Получение эндпоинтов методом GET:
     fetch('http://127.0.0.1:8000/api/v1/', {
       method: 'GET',
       credentials: 'include',
       mode: 'cors',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-csrftoken': csrfToken,
-      },
     })
     .then(response => {
       return response.json();
     })
     .then((endpoints) => {
-      // console.log('Endpoints', endpoints);
+      console.log('Endpoints:', endpoints);
     })
     .catch((error) => {
       console.log('Cannot execute GET method. Error:', error);
@@ -79,10 +70,7 @@ export class AppComponent {
       credentials: 'include',
       mode: 'cors',
       headers: {
-        Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'x-csrftoken': csrfToken,
-          'Authorization': 'Basic admin:admin'
+        'x-csrftoken': csrfToken
       },
     })
     .then((response) => {
