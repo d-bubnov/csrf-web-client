@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
-import { getCookie } from 'src/app/helpers/cookieHelper';
+import { UserCredentials } from './models/userCredentials';
+import { CsrfService } from './services/csrfService';
 
 @Component({
   selector: 'app-root',
@@ -9,72 +9,32 @@ import { getCookie } from 'src/app/helpers/cookieHelper';
 })
 export class AppComponent {
 
-  constructor(private cookieService: CookieService) {}
+  constructor(private csrfService: CsrfService) {}
 
-  onCsrfTokenClick() {
-    // Получение CSRF токена из эндпоинта:
-    this.getCsrfToken();
-  }
+  handleGetCsrfTokenClick() {
+    this.csrfService
+      .getCsrfToken()
+      .subscribe((success: boolean) => {
+        if (success) {
+          // Получим эндпоинты из корневого URI:
+          this.csrfService
+            .getEndpoints()
+            .subscribe((endpoints) => {
+              console.log('Endpoints: ', endpoints);
+            });
 
-  getCsrfToken() {
-    fetch('http://127.0.0.1:8000/api/v1/get-csrf-token/', {
-      method: 'GET',
-      credentials: 'include',
-      mode: 'cors'
-    })
-    .then(() => {
-      
-      const csrftoken = getCookie('csrftoken');
-      console.log('csrftoken: ', csrftoken);
-
-      this.getEndpoints();
-      this.authLogin();
-    })
-    .catch((error) => {
-      console.log('Cannot execute GET method. Error:', error);
-    });
-  }
-
-  getEndpoints() {
-    // Получение эндпоинтов методом GET:
-    fetch('http://127.0.0.1:8000/api/v1/', {
-      method: 'GET',
-      credentials: 'include',
-      mode: 'cors',
-    })
-    .then(response => {
-      return response.json();
-    })
-    .then((endpoints) => {
-      console.log('Endpoints:', endpoints);
-    })
-    .catch((error) => {
-      console.log('Cannot execute GET method. Error:', error);
-    });
-  }
-
-  authLogin() {
-
-    const csrfToken = getCookie('csrftoken');
-
-    fetch('http://127.0.0.1:8000/api/v1/api-auth/login/', {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-csrftoken': `${csrfToken}`
-      },
-      body: JSON.stringify({
-        username: 'admin',
-        password: 'admin',
-      }),
-    })
-    .then((response) => {
-      // console.log('api/v1/api-auth/login', response);
-    })
-    .catch((error) => {
-      console.log('Cannot execute POST method. Error:', error);
-    });
+          // Попытаемся залогиниться:
+          this.csrfService
+            .authLogin({
+              username: 'admin',
+              password: 'admin'
+            } as UserCredentials)
+            .subscribe((success: boolean) => {
+              if (success) {
+                console.log('User logged in!');
+              }
+            });
+        }
+      });
   }
 }
