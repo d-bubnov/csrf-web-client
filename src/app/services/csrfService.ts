@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, ObservableInput, of, switchMap } from "rxjs";
+import { catchError, map, Observable, ObservableInput, of } from "rxjs";
 import { environment } from "src/environments/environment";
 import { getCookie } from "../helpers/cookieHelper";
 import { UserCredentials } from "../models/userCredentials";

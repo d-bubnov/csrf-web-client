@@ -1,9 +1,38 @@
-
-<div class="content" role="main">
-
-  <h2> Тестирование долбаного CSRF токена </h2>
-  <p>Что нужно сделать? Нажать на кнопку!</p>
-
-  <button (click)="handleGetCsrfTokenClick()" title="А ты уверен?">Получить CSRF токен</button>
-
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Получение CSRF токена в Cookies</mat-card-title>
+      <mat-card-subtitle>Введите учетные данные</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="mat-card-content">
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Логин</mat-label>
+          <input matInput placeholder="Введите логин" [formControl]="username" required>
+          <mat-icon matSuffix>account_circle</mat-icon>
+          <mat-error *ngIf="username.hasError('required')">Введите логин</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Пароль</mat-label>
+          <input matInput placeholder="Введите пароль" [formControl]="password" [type]="hide ? 'password' : 'text'" required>
+          <mat-icon matSuffix (click)="hide = !hide">
+            {{
+              hide
+                ? 'visibility_off'
+                : 'visibility'
+            }}
+          </mat-icon>
+          <mat-error *ngIf="password.hasError('required')">Введите пароль</mat-error>
+        </mat-form-field>
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" class="csrf-button" (click)="handleGetCsrfTokenClick()">Получить CSRF токен</button>
+    </mat-card-actions>
+    <mat-card-footer class="mat-card-footer">
+      <button mat-raised-button color="primary" (click)="handleShowCookiesClick()">Посмотреть доступные Cookie</button>
+    </mat-card-footer>
+  </mat-card>
 </div>

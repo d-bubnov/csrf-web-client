@@ -1,17 +1,31 @@
-export const getCookie = (name: string): string | null => {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
+import { CookieEntry } from "../models/cookieEntry";
 
-    return cookieValue;
+export const getCookie = (name: string): string | null => {
+  let cookieValue = null;
+  if (name && document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let index = 0; index < cookies.length; index++) {
+      const cookie = cookies[index].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
   }
+
+  return cookieValue;
+}
   
+export const getAllCookies = (): CookieEntry[] => {
+  const result: CookieEntry[] = [];
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+
+    for (let index = 0; index < cookies.length; index++) {
+      const [ name, value ] = cookies[index].trim().split('=');
+      result.push({ name, value });
+    }
+  }
+
+  return result;
+}

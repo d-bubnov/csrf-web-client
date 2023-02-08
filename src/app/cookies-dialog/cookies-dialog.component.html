@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Доступные Cookie</h2>
+
+<mat-dialog-content>
+
+    <mat-table [dataSource]="cookies" class="mat-elevation-z8" style="margin-top: 10px;" *ngIf="cookies.length > 0">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Ключ </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef> Значение </th>
+            <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </mat-table>
+
+    <div *ngIf="cookies.length === 0">
+        <h4>
+            Нет данных для отображения
+        </h4>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>Закрыть</button>
+</mat-dialog-actions>

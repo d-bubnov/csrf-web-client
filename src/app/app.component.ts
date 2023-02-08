@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CookiesDialogComponent } from './cookies-dialog/cookies-dialog.component';
+
 import { UserCredentials } from './models/userCredentials';
 import { CsrfService } from './services/csrfService';
 
@@ -9,9 +14,36 @@ import { CsrfService } from './services/csrfService';
 })
 export class AppComponent {
 
-  constructor(private csrfService: CsrfService) {}
+  hide = true;
+  username = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required]);
 
-  handleGetCsrfTokenClick() {
+  constructor(
+    private csrfService: CsrfService,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar)
+  {}
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'Закрыть');
+  }
+
+  handleShowCookiesClick(): void {
+    this.dialog.open(CookiesDialogComponent);
+  }
+
+  handleGetCsrfTokenClick(): void {
+
+    if (this.username.invalid || this.password.invalid) {
+      this.openSnackBar('Введите учетные данные');
+      return;
+    }
+
+    const credentials = {
+      username: this.username.value,
+      password: this.password.value
+    } as UserCredentials
+
     this.csrfService
       .getCsrfToken()
       .subscribe((success: boolean) => {
@@ -25,13 +57,10 @@ export class AppComponent {
 
           // Попытаемся залогиниться:
           this.csrfService
-            .authLogin({
-              username: 'admin',
-              password: 'admin'
-            } as UserCredentials)
+            .authLogin(credentials)
             .subscribe((success: boolean) => {
               if (success) {
-                console.log('User logged in!');
+                this.openSnackBar('Пользователь успрешно вошел в систему');
               }
             });
         }
