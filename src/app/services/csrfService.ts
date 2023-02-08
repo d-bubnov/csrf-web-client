@@ -16,10 +16,15 @@ export class CsrfService {
 
   /** Логин пользователя в системе */
   authLogin(credentials: UserCredentials): Observable<boolean> {
+    
+    var formData: any = new FormData();
+    formData.append("username", credentials.username);
+    formData.append("password", credentials.password);
+
     return this.http
       .post(
         `${this.uri}/api-auth/login/`,
-        JSON.stringify(credentials),
+        formData,
         {
           withCredentials: true,
           responseType: 'text',
